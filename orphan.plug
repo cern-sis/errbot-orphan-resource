@@ -1,0 +1,10 @@
+[Core]
+name = orphan
+module = orphan
+
+[Documentation]
+description = A plugin to list all orphan resources - resources that are not managed by ArgoCD 
+
+[Python]
+version = 3
+
