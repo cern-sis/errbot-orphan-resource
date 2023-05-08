@@ -11,6 +11,8 @@ class Orphan(BotPlugin):
     def orphan_resources(self, msg, args):
         api = client.CoreV1Api()
         namespaces = api.list_namespace().items
+        self.log.info("namespaces: ")
+        self.log.info(namespaces)
         excluded_namespaces = ["jimil-test"]
         resources = []
         for ns in namespaces:
