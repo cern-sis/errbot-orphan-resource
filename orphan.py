@@ -16,21 +16,20 @@ class Orphan(BotPlugin):
         excluded_namespaces = ["jimil-test"]
         resources = []
         for ns in namespaces:
-            self.log.info("ns.metadata.name: ")
-            self.log.info(ns.metadata.name)
             if ns.metadata.name not in excluded_namespaces:
                 api = client.CustomObjectsApi()
                 resources += api.list_cluster_custom_object(
                     group="argoproj.io",
                     version="v1alpha1",
-                    namespace=ns.metadata.name,
                     plural="applications",
                 )["items"]
         all_resources = api.list_cluster_custom_object("", "", "", "").get("items", [])
-        unmanaged_resources = []
-        for resource in all_resources:
-            if resource not in resources:
-                unmanaged_resources.append(resource)
+        unmanaged_resources = [
+            resource for resource in all_resources if resource not in resources
+        ]
         return "\n".join(
-            [f"{r['kind']}/{r['metadata']['name']}" for r in unmanaged_resources]
+            [
+                f"{r['kind']}/{r['metadata']['name']} ({r.get('metadata', {}).get('namespace')})"
+                for r in unmanaged_resources
+            ]
         )
