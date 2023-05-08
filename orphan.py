@@ -23,9 +23,7 @@ class Orphan(BotPlugin):
                     version="v1alpha1",
                     plural="applicationsets",
                 )["items"]
-        all_resources = api.list_cluster_custom_object(
-            group="", version="", plural=""
-        ).get("items", [])
+        all_resources = api.list_cluster_custom_object().get("items", [])
         unmanaged_resources = [
             resource for resource in all_resources if resource not in resources
         ]
