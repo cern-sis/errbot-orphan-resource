@@ -14,7 +14,7 @@ class Orphan(BotPlugin):
         excluded_namespaces = ["jimil-test"]
         resources = []
         for ns in namespaces:
-            print(ns.metadata.name)
+            self.log.info(ns.metadata.name)
             if ns.metadata.name not in excluded_namespaces:
                 api = client.CustomObjectsApi()
                 resources += api.list_cluster_custom_object(
