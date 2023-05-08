@@ -21,7 +21,7 @@ class Orphan(BotPlugin):
                 resources += api.list_cluster_custom_object(
                     group="argoproj.io",
                     version="v1alpha1",
-                    plural="applications",
+                    plural="applicationsets",
                 )["items"]
         all_resources = api.list_cluster_custom_object("", "", "", "").get("items", [])
         unmanaged_resources = [
