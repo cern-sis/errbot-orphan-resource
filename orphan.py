@@ -31,6 +31,7 @@ class Orphan(BotPlugin):
         app_types = ["deployment", "stateful_set"]
         core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
         batch_types = ["cron_job", "job"]
+
         for ns in namespaces:
             for resource_type in app_types:
                 resources = getattr(
