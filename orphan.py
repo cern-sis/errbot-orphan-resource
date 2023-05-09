@@ -49,7 +49,8 @@ class Orphan(BotPlugin):
                 client.BatchV1Api(), f"list_namespaced_{resource_type}"
             )(namespace=ns.metadata.name).items
             k8s_resources += resources
-
+        for r in k8s_resources:
+            self.log.info(f"{r.metadata.name} {r.metadata.namespace}")
         unmanaged_resources = [
             resource
             for resource in k8s_resources
@@ -61,6 +62,10 @@ class Orphan(BotPlugin):
                 and resource.metadata.namespace not in excluded_namespaces
             )
         ]
+
+        self.log.info("unmanaged resources")
+        for r in unmanaged_resources:
+            self.log.info(f"{r.metadata.name} {r.metadata.namespace}"
 
         output = [
             f"{r.kind}/{r.metadata.name} ({r.metadata.namespace})"
