@@ -29,7 +29,7 @@ class Orphan(BotPlugin):
                 argocd_resources += resources
         self.log.info("argocd resources")
         for r in argocd_resources:
-            self.log.info(f"{r.metadata.name} {r.metadata.namespace}")
+            self.log.info(f"{r}")
         k8s_resources = []
         app_types = ["deployment", "stateful_set"]
         core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
