@@ -29,7 +29,7 @@ class Orphan(BotPlugin):
                 argocd_resources += resources
 
         k8s_resources = []
-        app_types = ["deployments", "statefulsets"]
+        app_types = ["deployment", "stateful_set"]
         core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
         batch_types = ["cron_job", "job"]
         for resource_type in app_types:
