@@ -21,7 +21,10 @@ class Orphan(BotPlugin):
         for ns in namespaces:
             if ns.metadata.name not in excluded_namespaces:
                 resources = api.list_namespaced_custom_object(
-                    group=argocd_group, version=argocd_version, plural=argocd_plural
+                    group=argocd_group,
+                    version=argocd_version,
+                    plural=argocd_plural,
+                    namespace=ns.metadata.name,
                 )["items"]
                 argocd_resources += resources
 
