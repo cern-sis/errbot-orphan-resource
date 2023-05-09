@@ -27,9 +27,6 @@ class Orphan(BotPlugin):
                     namespace=ns.metadata.name,
                 )["items"]
                 argocd_resources += resources
-        self.log.info("argocd resources")
-        for r in argocd_resources:
-            self.log.info(f"{r}")
         k8s_resources = []
         app_types = ["deployment", "stateful_set"]
         core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
@@ -56,17 +53,14 @@ class Orphan(BotPlugin):
             resource
             for resource in k8s_resources
             if (
-                not any(
-                    resource.metadata.name == argocd_res["metadata"]["name"]
-                    for argocd_res in argocd_resources
-                )
+                not resource.metadata.labels
+                or "argocd.argoproj.io/instance" not in resource.metadata.labels
                 and resource.metadata.namespace not in excluded_namespaces
             )
         ]
 
         output = [
-            f"{r.kind}/{r.metadata.name} ({r.metadata.namespace})"
-            for r in unmanaged_resources
+            f"{r.metadata.name} ({r.metadata.namespace})" for r in unmanaged_resources
         ]
 
         output_resource = "\n".join(output)
