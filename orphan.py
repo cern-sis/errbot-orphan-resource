@@ -55,8 +55,10 @@ class Orphan(BotPlugin):
             for resource in k8s_resources
             if (
                 not resource.metadata.labels
-                or "argocd.argoproj.io/instance" not in resource.metadata.labels
-                and resource.metadata.namespace not in excluded_namespaces
+                or (
+                    "argocd.argoproj.io/instance" not in resource.metadata.labels
+                    and resource.metadata.namespace not in excluded_namespaces
+                )
             )
         ]
 
