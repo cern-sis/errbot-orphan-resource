@@ -27,28 +27,31 @@ class Orphan(BotPlugin):
                     namespace=ns.metadata.name,
                 )["items"]
                 argocd_resources += resources
-
+        self.log.info("argocd resources")
+        for r in argocd_resources:
+            self.log.info(f"{r.metadata.name} {r.metadata.namespace}")
         k8s_resources = []
         app_types = ["deployment", "stateful_set"]
         core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
         batch_types = ["cron_job", "job"]
-        for resource_type in app_types:
-            resources = getattr(client.AppsV1Api(), f"list_namespaced_{resource_type}")(
-                namespace=ns.metadata.name
-            ).items
-            k8s_resources += resources
+        for ns in namespaces:
+            for resource_type in app_types:
+                resources = getattr(
+                    client.AppsV1Api(), f"list_namespaced_{resource_type}"
+                )(namespace=ns.metadata.name).items
+                k8s_resources += resources
 
-        for resource_type in core_types:
-            resources = getattr(client.CoreV1Api(), f"list_namespaced_{resource_type}")(
-                namespace=ns.metadata.name
-            ).items
-            k8s_resources += resources
+            for resource_type in core_types:
+                resources = getattr(
+                    client.CoreV1Api(), f"list_namespaced_{resource_type}"
+                )(namespace=ns.metadata.name).items
+                k8s_resources += resources
 
-        for resource_type in batch_types:
-            resources = getattr(
-                client.BatchV1Api(), f"list_namespaced_{resource_type}"
-            )(namespace=ns.metadata.name).items
-            k8s_resources += resources
+            for resource_type in batch_types:
+                resources = getattr(
+                    client.BatchV1Api(), f"list_namespaced_{resource_type}"
+                )(namespace=ns.metadata.name).items
+                k8s_resources += resources
         for r in k8s_resources:
             self.log.info(f"{r.metadata.name} {r.metadata.namespace}")
         unmanaged_resources = [
