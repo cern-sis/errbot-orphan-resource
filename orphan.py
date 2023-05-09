@@ -9,7 +9,7 @@ class Orphan(BotPlugin):
 
     @botcmd
     def orphan_resources(self, msg, args):
-        api = client.CustomObjectApi()
+        api = client.CustomObjectsApi()
         namespaces = client.CoreV1Api().list_namespace().items
 
         argocd_group = "argoproj.io"
