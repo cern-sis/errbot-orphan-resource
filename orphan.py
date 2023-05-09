@@ -33,23 +33,24 @@ class Orphan(BotPlugin):
         batch_types = ["cron_job", "job"]
 
         for ns in namespaces:
-            for resource_type in app_types:
-                resources = getattr(
-                    client.AppsV1Api(), f"list_namespaced_{resource_type}"
-                )(namespace=ns.metadata.name).items
-                k8s_resources += resources
+            if ns.metadata.name not in excluded_namespaces:
+                for resource_type in app_types:
+                    resources = getattr(
+                        client.AppsV1Api(), f"list_namespaced_{resource_type}"
+                    )(namespace=ns.metadata.name).items
+                    k8s_resources += resources
 
-            for resource_type in core_types:
-                resources = getattr(
-                    client.CoreV1Api(), f"list_namespaced_{resource_type}"
-                )(namespace=ns.metadata.name).items
-                k8s_resources += resources
+                for resource_type in core_types:
+                    resources = getattr(
+                        client.CoreV1Api(), f"list_namespaced_{resource_type}"
+                    )(namespace=ns.metadata.name).items
+                    k8s_resources += resources
 
-            for resource_type in batch_types:
-                resources = getattr(
-                    client.BatchV1Api(), f"list_namespaced_{resource_type}"
-                )(namespace=ns.metadata.name).items
-                k8s_resources += resources
+                for resource_type in batch_types:
+                    resources = getattr(
+                        client.BatchV1Api(), f"list_namespaced_{resource_type}"
+                    )(namespace=ns.metadata.name).items
+                    k8s_resources += resources
         unmanaged_resources = [
             resource
             for resource in k8s_resources
