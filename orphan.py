@@ -65,7 +65,7 @@ class Orphan(BotPlugin):
 
         self.log.info("unmanaged resources")
         for r in unmanaged_resources:
-            self.log.info(f"{r.metadata.name} {r.metadata.namespace}"
+            self.log.info(f"{r.metadata.name} {r.metadata.namespace}")
 
         output = [
             f"{r.kind}/{r.metadata.name} ({r.metadata.namespace})"
