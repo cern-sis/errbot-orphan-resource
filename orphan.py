@@ -29,20 +29,25 @@ class Orphan(BotPlugin):
                 argocd_resources += resources
 
         k8s_resources = []
-        resource_types = [
-            "deployments",
-            "statefulsets",
-            "persistentvolumeclaims",
-            "services",
-            "cronjobs",
-            "jobs",
-        ]
-        for resource_type in resource_types:
-            resources = getattr(client.AppsV1Api(), f"list_{resource_type}")().items
+        app_types = ["deployments", "statefulsets"]
+        core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
+        batch_types = ["cron_job", "job"]
+        for resource_type in app_types:
+            resources = getattr(client.AppsV1Api(), f"list_namespaced_{resource_type}")(
+                namespace=ns.metadata.name
+            ).items
             k8s_resources += resources
 
-        for resource_type in ["configmaps", "secrets"]:
-            resources = getattr(client.CoreV1Api(), f"list_{resource_type}")().items
+        for resource_type in core_types:
+            resources = getattr(client.CoreV1Api(), f"list_namespaced_{resource_type}")(
+                namespace=ns.metadata.name
+            ).items
+            k8s_resources += resources
+
+        for resource_type in batch_types:
+            resources = getattr(
+                client.BatchV1Api(), f"list_namespaced_{resource_type}"
+            )(namespace=ns.metadata.name).items
             k8s_resources += resources
 
         unmanaged_resources = [
