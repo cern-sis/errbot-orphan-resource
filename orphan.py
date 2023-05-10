@@ -9,24 +9,8 @@ class Orphan(BotPlugin):
 
     @botcmd
     def orphan_resources(self, msg, args):
-        api = client.CustomObjectsApi()
         namespaces = client.CoreV1Api().list_namespace().items
-
-        argocd_group = "argoproj.io"
-        argocd_version = "v1alpha1"
-        argocd_plural = "applicationsets"
-
-        argocd_resources = []
         excluded_namespaces = ["jimil-test"]
-        for ns in namespaces:
-            if ns.metadata.name not in excluded_namespaces:
-                resources = api.list_namespaced_custom_object(
-                    group=argocd_group,
-                    version=argocd_version,
-                    plural=argocd_plural,
-                    namespace=ns.metadata.name,
-                )["items"]
-                argocd_resources += resources
         k8s_resources = []
         app_types = ["deployment", "stateful_set"]
         core_types = ["config_map", "secret", "persistent_volume_claim", "service"]
