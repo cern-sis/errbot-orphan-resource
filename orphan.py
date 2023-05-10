@@ -47,11 +47,8 @@ class Orphan(BotPlugin):
             )
         ]
 
-        for r in unmanaged_resources:
-            self.log.info(r)
         output = [
-            f"{r.kind} {r.metadata.name} ({r.metadata.namespace})"
-            for r in unmanaged_resources
+            f"{r.metadata.name} ({r.metadata.namespace})" for r in unmanaged_resources
         ]
 
         output_resource = "\n".join(output)
