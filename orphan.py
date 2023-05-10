@@ -48,7 +48,8 @@ class Orphan(BotPlugin):
         ]
 
         output = [
-            f"{r.metadata.name} ({r.metadata.namespace})" for r in unmanaged_resources
+            f"{r.kind} {r.metadata.name} ({r.metadata.namespace})"
+            for r in unmanaged_resources
         ]
 
         output_resource = "\n".join(output)
